@@ -1,0 +1,358 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Recommendation Widget Demonstration</title>
+    <!--Widget Configuration Information
+    1. Jacksonville.com Recommended for you
+    f2f2f8c3a782b3a4418fe5c98f6109b89abf34b8
+    Recommended for you with 60% behavioral, 20% collaborative user, 10% collaborative contextual, 5% trending, and 5% contextual.
+    2. Jacksonville.com Trending
+    404c92e2e70bbcf1c960acd1e8c000b3d82d06f1
+    Trending recipe weighted highest with a uniquified branch (removes duplicate results) that pulls the best items from three different branches of poptarget, collaborative contextual, or contextual.
+    -->
+    <!-- for tabbing and basic styling -->
+    <script src="//code.jquery.com/jquery-2.2.0.min.js"></script>
+    <style>
+      body {
+          font-family: sans-serif;
+          line-height: 1.6;
+          padding: 0 10%;
+      }
+
+      .container {
+          margin: 0 auto;
+      }
+
+      ul.tabs {
+          margin: 0px;
+          padding: 0px;
+          list-style: none;
+      }
+
+      ul.tabs li {
+          background: none;
+          color: #222;
+          display: inline-block;
+          padding: 10px 15px;
+          cursor: pointer;
+      }
+
+      ul.tabs li.current {
+          background: #ededed;
+          color: #222;
+      }
+
+      .tab-content {
+          display: none;
+          background: #ededed;
+          padding: 15px;
+      }
+
+      .tab-content.current {
+          display: inherit;
+      }
+      /*styling for tabbed recommendations*/
+
+      ol.rec-list {
+          list-style: none;
+      }
+
+      li.recommendation-link {
+          width: 100%;
+          border-bottom: 1px solid #CCCBCB;
+          display: inline-block;
+          padding: 1% 0;
+      }
+
+      .recommendation-link a {
+          color: black;
+          text-transform: capitalize;
+          text-decoration: none;
+          font-size: 12px;
+          font-family: sans-serif;
+      }
+
+      h2.item-heading {
+          font-weight: lighter;
+      }
+
+      .item-heading {
+          max-width: 80%;
+          display: inline-block;
+          padding-left: 1%;
+      }
+
+      .small-thumb {
+          max-width: 19%;
+          float: left;
+      }
+
+      .recommendation-link img {
+          max-width: 100%;
+          display: block;
+          margin: 0 auto;
+      }
+    </style>
+    <script>
+      $(document).ready(function() {
+          $('ul.tabs li').click(function() {
+              var tab_id = $(this).attr('data-tab');
+
+              $('ul.tabs li').removeClass('current');
+              $('.tab-content').removeClass('current');
+
+              $(this).addClass('current');
+              $("#" + tab_id).addClass('current');
+          })
+
+      })
+    </script>
+    <!--end tabbing-->
+</head>
+
+<body>
+    <section id="recommendations" class="recommendations">
+        <div class="container">
+            <ul class="tabs">
+                <li class="tab-link current" data-tab="tab-1">Todos</li>
+                <li class="tab-link" data-tab="tab-2">Eventos</li>
+                <li class="tab-link" data-tab="tab-3">Restaurantes</li>
+                <li class="tab-link" data-tab="tab-4">Bares y discotecas</li>
+            </ul>
+        </div>
+        <div id="tab-1" class="tab-content current">
+            <ol class="rec-list">
+                <!-- Template will be rendered inside this element -->
+                <div id="targetAll">
+                    <!-- Template (invisible) -->
+                    <!-- the templates used here are all the same, so they can be collapsed into a single function, but if that is does, it obscures teh ease of embedding template tags -->
+                    <div id="templateAll" class="template">
+                        <!--%
+                        var items = data.response.items;
+                        for (var i = 0; i < items.length; i++) {
+                            var item = items[i];
+                            var clickurl = item.click_url;
+                            var title = item["recs-pep-title-register"] || "No title";
+                            var description = item["recs-pep-description-register"];
+                            var imgurl = (item.dominantthumbnaildimensions && item.dominantthumbnail) || item.dominantimage || item.thumbnail;
+                            var tag = item.tag || 'default';
+                            var clickUrl = item.click_url + '?cx_navSource=cx_recRRRec&cx_tag=' + tag + '&cx_artPos=' + (i+1);
+                            if (title.length > 80) {
+                                    title = title.substr(0,80) + '...';
+                            }
+                        %-->
+                        <li class="recommendation-link">
+                            <a tmp:id="{{cX.clickTracker(clickUrl)}}" onclick="return true;" class="story-link" tmp:href="{{clickurl}}">
+                                <article class="item">
+                                    <div class="small-thumb">
+                                        <img tmp:src="{{imgurl}}" title="{{title}}" />
+                                    </div>
+                                    <h2 class="item-heading">
+                                        {{title}}
+                                    </h2>
+                                    <p>{{description}}</p>
+                                </article>
+                            </a>
+                        </li>
+                        <!--%
+                            }
+                        %-->
+                    </div>
+                </div>
+            </ol>
+        </div>
+        <div id="tab-2" class="tab-content">
+            <ol class="rec-list">
+                <!-- Template will be rendered inside this element -->
+                <div id="targetEvento">
+                    <!-- Template (invisible) -->
+                    <!-- the templates used here are all the same, so they can be collapsed into a single function, but if that is does, it obscures teh ease of embedding template tags -->
+                    <div id="templateEvento" class="template">
+                        <!--%
+                        var items = data.response.items;
+                        for (var i = 0; i < items.length; i++) {
+                            var item = items[i];
+                            var clickurl = item.click_url;
+                            var title = item["recs-pep-title-register"] || "No title";
+                            var description = item["recs-pep-description-register"];
+                            var imgurl = (item.dominantthumbnaildimensions && item.dominantthumbnail) || item.dominantimage || item.thumbnail;
+                            var tag = item.tag || 'default';
+                            var clickUrl = item.click_url + '?cx_navSource=cx_recRRTrending&cx_tag=' + tag + '&cx_artPos=' + (i+1);
+                            if (title.length > 80) {
+                                    title = title.substr(0,80) + '...';
+                            }
+                        %-->
+                        <li class="recommendation-link">
+                            <a tmp:id="{{cX.clickTracker(clickUrl)}}" onclick="return true;" class="story-link" tmp:href="{{clickurl}}">
+                                <article class="item">
+                                    <div class="small-thumb">
+                                        <img tmp:src="{{imgurl}}" title="{{title}}" />
+                                    </div>
+                                    <h2 class="item-heading">
+                                        {{title}}
+                                    </h2>
+                                    <p>{{description}}</p>
+                                </article>
+                            </a>
+                        </li>
+                        <!--%
+                            }
+                        %-->
+                    </div>
+                </div>
+            </ol>
+        </div>
+        <div id="tab-3" class="tab-content">
+            <ol class="rec-list">
+                <!-- Template will be rendered inside this element -->
+                <div id="targetRestaurant">
+                    <!-- Template (invisible) -->
+                    <!-- the templates used here are all the same, so they can be collapsed into a single function, but if that is does, it obscures teh ease of embedding template tags -->
+                    <div id="templateRestaurant" class="template">
+                        <!--%
+                        var items = data.response.items;
+                        for (var i = 0; i < items.length; i++) {
+                            var item = items[i];
+                            var clickurl = item.click_url;
+                            var title = item["recs-pep-title-register"] || "No title";
+                            var description = item["recs-pep-description-register"];
+                            var imgurl = (item.dominantthumbnaildimensions && item.dominantthumbnail) || item.dominantimage || item.thumbnail;
+                            var tag = item.tag || 'default';
+                            var clickUrl = item.click_url + '?cx_navSource=cx_recRRTrending&cx_tag=' + tag + '&cx_artPos=' + (i+1);
+                            if (title.length > 80) {
+                                    title = title.substr(0,80) + '...';
+                            }
+                        %-->
+                        <li class="recommendation-link">
+                            <a tmp:id="{{cX.clickTracker(clickUrl)}}" onclick="return true;" class="story-link" tmp:href="{{clickurl}}">
+                                <article class="item">
+                                    <div class="small-thumb">
+                                        <img tmp:src="{{imgurl}}" title="{{title}}" />
+                                    </div>
+                                    <h2 class="item-heading">
+                                        {{title}}
+                                    </h2>
+                                    <p>{{description}}</p>
+                                </article>
+                            </a>
+                        </li>
+                        <!--%
+                            }
+                        %-->
+                    </div>
+                </div>
+            </ol>
+        </div>
+        <div id="tab-4" class="tab-content">
+            <ol class="rec-list">
+                <!-- Template will be rendered inside this element -->
+                <div id="targetBar">
+                    <!-- Template (invisible) -->
+                    <!-- the templates used here are all the same, so they can be collapsed into a single function, but if that is does, it obscures teh ease of embedding template tags -->
+                    <div id="templateBar" class="template">
+                        <!--%
+                        var items = data.response.items;
+                        for (var i = 0; i < items.length; i++) {
+                            var item = items[i];
+                            var clickurl = item.click_url;
+                            var title = item["recs-pep-title-register"] || "No title";
+                            var description = item["recs-pep-description-register"];
+                            var imgurl = (item.dominantthumbnaildimensions && item.dominantthumbnail) || item.dominantimage || item.thumbnail;
+                            var tag = item.tag || 'default';
+                            var clickUrl = item.click_url + '?cx_navSource=cx_recRRTrending&cx_tag=' + tag + '&cx_artPos=' + (i+1);
+                            if (title.length > 80) {
+                                    title = title.substr(0,80) + '...';
+                            }
+                        %-->
+                        <li class="recommendation-link">
+                            <a tmp:id="{{cX.clickTracker(clickUrl)}}" onclick="return true;" class="story-link" tmp:href="{{clickurl}}">
+                                <article class="item">
+                                    <div class="small-thumb">
+                                        <img tmp:src="{{imgurl}}" title="{{title}}" />
+                                    </div>
+                                    <h2 class="item-heading">
+                                        {{title}}
+                                    </h2>
+                                    <p>{{description}}</p>
+                                </article>
+                            </a>
+                        </li>
+                        <!--%
+                            }
+                        %-->
+                    </div>
+                </div>
+            </ol>
+        </div>
+        <!-- end tabs-container -->
+    </section>
+    <script type="text/javascript">
+      var cX = cX || {};
+      cX.callQueue = cX.callQueue || [];
+      //the invididual widget types being created on this page
+      cX.callQueue.push(['insertWidget', {
+          //recommended widget using javascript template and inline styling
+          widgetId: '064aac3e733de1ee3803a48500c161fdef50612a',
+          templateElementId: 'templateAll',
+          targetElementId: 'targetAll',
+      },
+      {
+        context: {
+          "parameters": [{"key": "userquery", "value": "*"}]
+        }
+      }]);
+
+      cX.callQueue.push(['insertWidget', {
+          //trending widget using javascript template and inline styling
+          widgetId: '064aac3e733de1ee3803a48500c161fdef50612a',
+          templateElementId: 'templateEvento',
+          targetElementId: 'targetEvento',
+      },
+      {
+        context: {
+          "parameters": [{"key": "userquery", "value": "evento"}]
+        }
+      }]);
+
+      cX.callQueue.push(['insertWidget', {
+          //trending widget using javascript template and inline styling
+          widgetId: '064aac3e733de1ee3803a48500c161fdef50612a',
+          templateElementId: 'templateRestaurant',
+          targetElementId: 'targetRestaurant',
+      },
+      {
+        context: {
+          "parameters": [{"key": "userquery", "value": "restaurant"}]
+        }
+      }]);
+
+      cX.callQueue.push(['insertWidget', {
+          //trending widget using javascript template and inline styling
+          widgetId: '064aac3e733de1ee3803a48500c161fdef50612a',
+          templateElementId: 'templateBar',
+          targetElementId: 'targetBar',
+      },
+      {
+        context: {
+          "parameters": [{"key": "userquery", "value": "bar"}]
+        }
+      }]);
+    </script>
+    <script type="text/javascript">
+    //connect our widget ids with our tag names into an executable script
+    (function() {
+        try {
+            var scriptEl = document.createElement('script');
+            scriptEl.type = 'text/javascript';
+            scriptEl.async = 'async';
+            scriptEl.src = ('https:' == document.location.protocol) ? 'https://scdn.cxense.com/cx.js' : 'http://cdn.cxense.com/cx.js';
+            var targetEl = document.getElementsByTagName('script')[0];
+            targetEl.parentNode.insertBefore(scriptEl, targetEl);
+        } catch (e) {};
+    }());
+    </script>
+</body>
+
+</html>
